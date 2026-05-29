@@ -1,0 +1,7 @@
+*.sln
+
+.config/
+.vscode/
+
+bin/
+obj/
