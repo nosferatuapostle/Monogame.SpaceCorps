@@ -16,7 +16,7 @@ public class Core : Game
 
     public static new ContentManager Content;
 
-    public Core(string title, int width, int height, bool fullScreen)
+    public Core(string title, int width, int height, bool isFullScreen)
     {
         instance = this;
 
@@ -24,7 +24,7 @@ public class Core : Game
         {
             PreferredBackBufferWidth = width,
             PreferredBackBufferHeight = height,
-            IsFullScreen = fullScreen
+            IsFullScreen = isFullScreen
         };
 
         Graphics.ApplyChanges();
@@ -42,5 +42,12 @@ public class Core : Game
         GraphicsDevice = base.GraphicsDevice;
 
         SpriteBatch = new SpriteBatch(GraphicsDevice);
+    }
+
+    protected override void Update(GameTime gameTime)
+    {
+        Time.Update(gameTime);
+
+        base.Update(gameTime);
     }
 }
