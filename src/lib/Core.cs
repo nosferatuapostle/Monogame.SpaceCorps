@@ -20,11 +20,12 @@ public class Core : Game
     {
         instance = this;
 
-        Graphics = new GraphicsDeviceManager(this);
-
-        Graphics.PreferredBackBufferWidth = width;
-        Graphics.PreferredBackBufferHeight = height;
-        Graphics.IsFullScreen = fullScreen;
+        Graphics = new GraphicsDeviceManager(this)
+        {
+            PreferredBackBufferWidth = width,
+            PreferredBackBufferHeight = height,
+            IsFullScreen = fullScreen
+        };
 
         Graphics.ApplyChanges();
 

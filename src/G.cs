@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 public static class G
 {
-    public static GraphicsDevice GraphicsDevice;
-
     private static Dictionary<Color, Texture2D> pixelTextures = [];
 
     public static Texture2D GetPixelTexture(Color color)
@@ -15,7 +13,9 @@ public static class G
             return tex;
         }
 
-        pixelTextures[color] = tex;
-        return tex;
+        var pixelTex = new Texture2D(Core.GraphicsDevice, 1, 1);
+        pixelTex.SetData([color]);
+        pixelTextures[color] = pixelTex;
+        return pixelTex;
     }
 }
