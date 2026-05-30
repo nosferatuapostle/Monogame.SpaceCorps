@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Graphics;
 
 public class EntryPoint : Core
 {
-    public AnimatedSprite unit;
-    public Vector2 unitPosition;
+    public Unit unit;
 
     public EntryPoint() : base("Space Corpses", 1280, 720, false)
     {
-        
+
     }
 
     protected override void Initialize()
@@ -19,57 +19,63 @@ public class EntryPoint : Core
         base.Initialize();
     }
 
+    public static AnimatedSprite CreateAnimatedSprite(string assetName, int w, int h, int frameCount, double frameTime, bool loop = true, string name = "base")
+    {
+        var tex = Content.Load<Texture2D>(assetName);
+        var atlas = Texture2DAtlas.Create("atlas\\" + assetName, tex, w, h);
+        var ss = new SpriteSheet("spritesheet\\" + assetName, atlas);
+
+        ss.DefineAnimation(name, builder =>
+        {
+            builder.IsLooping(loop);
+            for (int i = 0; i < frameCount; i++)
+            {
+                builder.AddFrame(i, TimeSpan.FromSeconds(frameTime));
+            }
+        });
+
+        return new AnimatedSprite(ss, name);
+    }
+
     protected override void LoadContent()
     {
-        var tex = Content.Load<Texture2D>("unit_biomantes_scout_base");
-        var atlas = new TextureAtlas(tex);
+        var assetName = "unit_biomantes_scout_base";
+        var sprite = CreateAnimatedSprite(assetName, 64, 64, 7, 0.1);
 
-        atlas.AddRegion("frame1", 0, 0, 64, 64);
-        atlas.AddRegion("frame2", 64, 0, 64, 64);
-        atlas.AddRegion("frame3", 128, 0, 64, 64);
-        atlas.AddRegion("frame4", 192, 0, 64, 64);
-        atlas.AddRegion("frame5", 256, 0, 64, 64);
-        atlas.AddRegion("frame6", 320, 0, 64, 64);
-        atlas.AddRegion("frame7", 384, 0, 64, 64);
-
-        var frames = new List<TextureRegion>
+        var uv = new UnitValues
         {
-            atlas.GetRegion("frame1"),
-            atlas.GetRegion("frame2"),
-            atlas.GetRegion("frame3"),
-            atlas.GetRegion("frame4"),
-            atlas.GetRegion("frame5"),
-            atlas.GetRegion("frame6"),
-            atlas.GetRegion("frame7"),
+            Health = 100f,
+            MaxHealth = 100f,
+            Speed = 100f
         };
 
-        unit = atlas.CreateAnimatedSprite("base", new Animation(frames, TimeSpan.FromSeconds(0.1)));
+        unit = new Unit(sprite, uv);
 
-        unitPosition = new Vector2(100, 100);
-        
+        unit.Transform.Position = new Vector2(100, 100);
+
         base.LoadContent();
     }
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(GameTime gt)
     {
         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        unit.Update();
+        unit.Update(gt);
 
-        base.Update(gameTime);
+        base.Update(gt);
     }
 
-    protected override void Draw(GameTime gameTime)
+    protected override void Draw(GameTime gt)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         SpriteBatch.Begin();
 
-        unit.Draw(unitPosition);
+        unit.Draw(SpriteBatch);
 
         SpriteBatch.End();
 
-        base.Draw(gameTime);
+        base.Draw(gt);
     }
 }

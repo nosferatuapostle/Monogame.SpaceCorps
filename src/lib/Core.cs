@@ -44,10 +44,10 @@ public class Core : Game
         SpriteBatch = new SpriteBatch(GraphicsDevice);
     }
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(GameTime gt)
     {
-        Time.Update(gameTime);
+        Time.Update(gt);
 
-        base.Update(gameTime);
+        base.Update(gt);
     }
 }
