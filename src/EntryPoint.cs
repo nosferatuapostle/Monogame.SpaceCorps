@@ -57,9 +57,14 @@ public class EntryPoint : Core
             Speed = 100f
         };
 
-        unit = new Unit(sprite, uv);
+        unit = new Unit(uv);
 
         unit.Transform.Position = new Vector2(100, 100);
+
+        var r = new AnimatedSpriteRenderer(sprite, unit.Transform);
+        Renderer.Add(r);
+
+        unit.isPlayer = true;
 
         base.LoadContent();
     }
@@ -75,50 +80,33 @@ public class EntryPoint : Core
             Exit();
 
         unit.Update(gt);
+        foreach (var u in anotherUnits)
+        {
+            u.Update(gt);
+        }
 
         index++;
 
         if (index % 200 == 0)
         {
             var s = CreateAnimatedSprite(UNIT_BIOMANTES_SCOUT_BASE, 64, 64, 7, 0.1);
-            var unit = new Unit(s, new UnitValues
+            var u = new Unit(new UnitValues
             {
                 Health = 100f,
                 MaxHealth = 100f,
                 Speed = 100f
             });
 
-            unit.Transform.Position = new Vector2(nextPosition * 100, 200);
+            u.Transform.Position = new Vector2(nextPosition * 100, 200);
             nextPosition++;
 
-            anotherUnits.Add(unit);
+            anotherUnits.Add(u);
+
+            Renderer.Add(new AnimatedSpriteRenderer(s, u.Transform));
 
             index = 0;
         }
 
-        foreach (var u in anotherUnits)
-        {
-            u.Update(gt);
-        }
-
         base.Update(gt);
-    }
-
-    protected override void Draw(GameTime gt)
-    {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-
-        SpriteBatch.Begin();
-
-        unit.Draw(SpriteBatch);
-
-        foreach (var u in anotherUnits)
-        {
-            u.Draw(SpriteBatch);
-        }
-
-        SpriteBatch.End();
-
-        base.Draw(gt);
     }
 }

@@ -1,25 +1,40 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Input;
 
 public class Unit : GameObject
 {
-    public AnimatedSprite sprite;
     public UnitValues values;
+    public bool isPlayer;
 
-    public Unit(AnimatedSprite aSprite, UnitValues uv)
+    private Vector2 target;
+
+    public Unit(UnitValues uv)
     {
-        sprite = aSprite;
+        bool isPlayer = false;
         values = uv;
+        target = Vector2.Zero;
     }
 
     public void Update(GameTime gt)
     {
-        sprite.Update(gt);
-    }
+        if (isPlayer)
+        {
+            if (Input.Mouse.WasButtonPressed(MouseButton.Right))
+            {
+                target = G.MouseWorldPosition;
+            }
+        }
 
-    public void Draw(SpriteBatch sb)
-    {
-        sb.Draw(sprite, Transform);
+        if (target != Vector2.Zero)
+        {
+            var dir = target - Transform.Position;
+            if (dir.Length() < 10f)
+            {
+                target = Vector2.Zero;
+            }
+                
+            dir.Normalize();
+            Transform.Position += dir * 100f * Time.Delta;
+        }
     }
 }

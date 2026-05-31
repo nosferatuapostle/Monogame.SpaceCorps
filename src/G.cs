@@ -1,10 +1,15 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 
 public static class G
 {
     private static Dictionary<Color, Texture2D> pixelTextures;
+
+    public static OrthographicCamera Camera;
+
+    public static Vector2 MouseWorldPosition => Camera.ScreenToWorld(Input.Mouse.Position.ToVector2());
 
     static G()
     {

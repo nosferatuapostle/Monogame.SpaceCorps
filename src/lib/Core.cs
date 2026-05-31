@@ -1,6 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.ViewportAdapters;
 
 public class Core : Game
 {
@@ -30,10 +33,14 @@ public class Core : Game
         Graphics.ApplyChanges();
 
         Window.Title = title;
+        Window.AllowUserResizing = true;
+
         Content = base.Content;
         Content.RootDirectory = "res";
         IsMouseVisible = true;
     }
+
+    private BoxingViewportAdapter viewportAdapter;
 
     protected override void Initialize()
     {
@@ -42,12 +49,48 @@ public class Core : Game
         GraphicsDevice = base.GraphicsDevice;
 
         SpriteBatch = new SpriteBatch(GraphicsDevice);
+
+        viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1280, 720);
+        G.Camera = new OrthographicCamera(viewportAdapter);
     }
 
     protected override void Update(GameTime gt)
     {
         Time.Update(gt);
 
+        Input.Update();
+
+        Renderer.Update(gt);
+
+        if (Input.Keyboard.IsKeyDown(Keys.A))
+        {
+            G.Camera.Position -= new Vector2(100f * Time.Delta, 0f);
+        }
+
+        if (Input.Keyboard.IsKeyDown(Keys.D))
+        {
+            G.Camera.Position += new Vector2(100f * Time.Delta, 0f);
+        }
+
+        if (Input.Keyboard.IsKeyDown(Keys.W))
+        {
+            G.Camera.Position -= new Vector2(0f, 100f * Time.Delta);
+        }
+
+        if (Input.Keyboard.IsKeyDown(Keys.S))
+        {
+            G.Camera.Position += new Vector2(0f, 100f * Time.Delta);
+        }
+
         base.Update(gt);
+    }
+
+    protected override void Draw(GameTime gameTime)
+    {
+        GraphicsDevice.Clear(Color.CornflowerBlue);
+
+        Renderer.Render();
+
+        base.Draw(gameTime);
     }
 }
