@@ -1,11 +1,16 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Graphics;
 
 public static class G
 {
+    public const string UNIT_BIOMANTES_SCOUT_BASE = "unit_biomantes_scout_base";
+
     private static Dictionary<Color, Texture2D> pixelTextures;
+    public static Dictionary<string, SpriteSheet> ssheets;
 
     public static OrthographicCamera Camera;
 
@@ -14,6 +19,7 @@ public static class G
     static G()
     {
         pixelTextures = [];
+        ssheets = [];
     }
 
     public static Texture2D GetPixelTexture(Color color)
@@ -27,5 +33,28 @@ public static class G
         pixelTex.SetData([color]);
         pixelTextures[color] = pixelTex;
         return pixelTex;
+    }    
+
+    public static AnimatedSprite CreateAnimatedSprite(string assetName, int w, int h, int frameCount, double frameTime, bool loop = true, string name = "base")
+    {
+        if (!ssheets.ContainsKey(assetName))
+        {
+            var tex = Core.Content.Load<Texture2D>(assetName);
+            var atlas = Texture2DAtlas.Create("atlas\\" + assetName, tex, w, h);
+            var ss = new SpriteSheet("spritesheet\\" + assetName, atlas);
+
+            ss.DefineAnimation(name, builder =>
+            {
+                builder.IsLooping(loop);
+                for (int i = 0; i < frameCount; i++)
+                {
+                    builder.AddFrame(i, TimeSpan.FromSeconds(frameTime));
+                }
+            });
+
+            ssheets[assetName] = ss;
+        }
+
+        return new AnimatedSprite(ssheets[assetName], name);
     }
 }

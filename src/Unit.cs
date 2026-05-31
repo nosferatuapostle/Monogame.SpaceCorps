@@ -10,7 +10,6 @@ public class Unit : GameObject
 
     public Unit(UnitValues uv)
     {
-        bool isPlayer = false;
         values = uv;
         target = Vector2.Zero;
     }

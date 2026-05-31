@@ -62,24 +62,25 @@ public class Core : Game
 
         Renderer.Update(gt);
 
+        const float speed = 200f;
         if (Input.Keyboard.IsKeyDown(Keys.A))
         {
-            G.Camera.Position -= new Vector2(100f * Time.Delta, 0f);
+            G.Camera.Position -= new Vector2(speed * Time.Delta, 0f);
         }
 
         if (Input.Keyboard.IsKeyDown(Keys.D))
         {
-            G.Camera.Position += new Vector2(100f * Time.Delta, 0f);
+            G.Camera.Position += new Vector2(speed * Time.Delta, 0f);
         }
 
         if (Input.Keyboard.IsKeyDown(Keys.W))
         {
-            G.Camera.Position -= new Vector2(0f, 100f * Time.Delta);
+            G.Camera.Position -= new Vector2(0f, speed * Time.Delta);
         }
 
         if (Input.Keyboard.IsKeyDown(Keys.S))
         {
-            G.Camera.Position += new Vector2(0f, 100f * Time.Delta);
+            G.Camera.Position += new Vector2(0f, speed * Time.Delta);
         }
 
         base.Update(gt);

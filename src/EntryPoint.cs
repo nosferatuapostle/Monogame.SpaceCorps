@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Graphics;
 
 public class EntryPoint : Core
 {
@@ -19,36 +17,9 @@ public class EntryPoint : Core
         base.Initialize();
     }
 
-    public const string UNIT_BIOMANTES_SCOUT_BASE = "unit_biomantes_scout_base";
-
-    public static Dictionary<string, SpriteSheet> ssheets = [];
-
-    public static AnimatedSprite CreateAnimatedSprite(string assetName, int w, int h, int frameCount, double frameTime, bool loop = true, string name = "base")
-    {
-        if (!ssheets.ContainsKey(assetName))
-        {
-            var tex = Content.Load<Texture2D>(assetName);
-            var atlas = Texture2DAtlas.Create("atlas\\" + assetName, tex, w, h);
-            var ss = new SpriteSheet("spritesheet\\" + assetName, atlas);
-
-            ss.DefineAnimation(name, builder =>
-            {
-                builder.IsLooping(loop);
-                for (int i = 0; i < frameCount; i++)
-                {
-                    builder.AddFrame(i, TimeSpan.FromSeconds(frameTime));
-                }
-            });
-
-            ssheets[assetName] = ss;
-        }
-
-        return new AnimatedSprite(ssheets[assetName], name);
-    }
-
     protected override void LoadContent()
     {
-        var sprite = CreateAnimatedSprite(UNIT_BIOMANTES_SCOUT_BASE, 64, 64, 7, 0.1);
+        var sprite = G.CreateAnimatedSprite(G.UNIT_BIOMANTES_SCOUT_BASE, 64, 64, 7, 0.1);
 
         var uv = new UnitValues
         {
@@ -89,7 +60,7 @@ public class EntryPoint : Core
 
         if (index % 200 == 0)
         {
-            var s = CreateAnimatedSprite(UNIT_BIOMANTES_SCOUT_BASE, 64, 64, 7, 0.1);
+            var s = G.CreateAnimatedSprite(G.UNIT_BIOMANTES_SCOUT_BASE, 64, 64, 7, 0.1);
             var u = new Unit(new UnitValues
             {
                 Health = 100f,
