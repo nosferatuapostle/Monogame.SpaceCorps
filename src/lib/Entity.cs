@@ -20,7 +20,9 @@ public class Entity : GameObject
         components = [];
     }
 
-    public void Update()
+    public virtual void Initialize() {}
+
+    public virtual void Update()
     {
         foreach (var c in components)
         {

@@ -1,4 +1,4 @@
-public class UnitValues
+public class UnitValues : Component
 {
     public float Health;
     public float MaxHealth;

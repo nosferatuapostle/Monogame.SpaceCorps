@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Input;
 
 public class Game : Core
 {
-    public Unit unit;
-
     public Game() : base("Space Corpses", 1280, 720, false) {}
 
     protected override void Initialize()
@@ -24,7 +22,7 @@ public class Game : Core
             Speed = 100f
         };
 
-        unit = new Unit(uv);
+        var unit = new Unit(uv);
 
         unit.Transform.Position = new Vector2(100, 100);
 
@@ -32,6 +30,8 @@ public class Game : Core
         G.Renderer.Add(r);
 
         unit.isPlayer = true;
+
+        G.Entt.Add(unit);
 
         base.LoadContent();
     }
@@ -46,14 +46,8 @@ public class Game : Core
         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        unit.Update(gt);
-        foreach (var u in anotherUnits)
-        {
-            u.Update(gt);
-        }
 
         index++;
-
         if (index % 200 == 0)
         {
             var s = G.CreateAnimatedSprite(new SpriteKey(G.UNIT_BIOMANTES_SCOUT_BASE), 64, 64, 7, 0.1);
@@ -70,6 +64,8 @@ public class Game : Core
             anotherUnits.Add(u);
 
             G.Renderer.Add(new AnimatedSpriteRenderer(s, u.Transform));
+
+            G.Entt.Add(u);
 
             index = 0;
         }

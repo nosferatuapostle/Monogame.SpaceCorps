@@ -59,6 +59,8 @@ public class Core : Microsoft.Xna.Framework.Game
         G.Input.Update();
         G.Time.Update(gt);
         G.Renderer.Update(gt);
+        
+        G.Entt.Update();
 
         var kb = G.Input.Keyboard;
         var time = G.Time;

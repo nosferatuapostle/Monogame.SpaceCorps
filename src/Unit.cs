@@ -1,20 +1,20 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Input;
 
-public class Unit : GameObject
+public class Unit : Entity
 {
-    public UnitValues Values;
     public bool isPlayer;
 
     private UnitMovement movement;
 
     public Unit(UnitValues uv)
     {
-        Values = uv;
+        AddComponent(uv);
         movement = new UnitMovement();
+        AddComponent(movement);
     }
 
-    public void Update(GameTime gt)
+    public override void Update()
     {
         if (isPlayer)
         {
@@ -25,6 +25,6 @@ public class Unit : GameObject
             }
         }
 
-        movement.Update(this);
+        base.Update();
     }
 }

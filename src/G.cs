@@ -22,6 +22,8 @@ public static class G
     public static TimeSystem Time;
     public static RenderSystem Renderer;
 
+    public static EntitySystem Entt;
+
     static G()
     {
         pixelTextures = [];
@@ -31,6 +33,7 @@ public static class G
         Time = new TimeSystem();
         Renderer = new RenderSystem();
 
+        Entt = new EntitySystem();
     }
 
     public static Texture2D GetPixelTexture(Color color)

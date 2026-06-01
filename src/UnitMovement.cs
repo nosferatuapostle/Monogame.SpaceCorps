@@ -5,26 +5,32 @@ public delegate void UnitStartMoving(StartMovintData data);
 
 public record class StartMovintData(Unit unit, Vector2 startPosition);
 
-public class UnitMovement
+public class UnitMovement : Component
 {
     public Vector2 Target;
 
     public bool InMove => Target != Vector2.Zero;
+
+    private UnitValues uv;
 
     public UnitMovement()
     {
         Target = Vector2.Zero;
     }
 
-    public void Update(Unit unit)
+    public override void OnAdded()
+    {
+        uv = Entity.GetComponent<UnitValues>();
+    }
+
+    public override void OnUpdate()
     {
         if (!InMove)
         {
             return;
         }
 
-        var t = unit.Transform;
-        var uv = unit.Values;
+        var t = Entity.Transform;
 
         var dir = Target - t.Position;
         if (dir.Length() < 10f)
