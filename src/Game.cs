@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-public class EntryPoint : Core
+public class Game : Core
 {
     public Unit unit;
 
-    public EntryPoint() : base("Space Corpses", 1280, 720, false)
-    {
-
-    }
+    public Game() : base("Space Corpses", 1280, 720, false) {}
 
     protected override void Initialize()
     {
@@ -19,7 +15,7 @@ public class EntryPoint : Core
 
     protected override void LoadContent()
     {
-        var sprite = G.CreateAnimatedSprite(G.UNIT_BIOMANTES_SCOUT_BASE, 64, 64, 7, 0.1);
+        var sprite = G.CreateAnimatedSprite(new SpriteKey(G.UNIT_BIOMANTES_SCOUT_BASE), 64, 64, 7, 0.1);
 
         var uv = new UnitValues
         {
@@ -33,7 +29,7 @@ public class EntryPoint : Core
         unit.Transform.Position = new Vector2(100, 100);
 
         var r = new AnimatedSpriteRenderer(sprite, unit.Transform);
-        Renderer.Add(r);
+        G.Renderer.Add(r);
 
         unit.isPlayer = true;
 
@@ -60,7 +56,7 @@ public class EntryPoint : Core
 
         if (index % 200 == 0)
         {
-            var s = G.CreateAnimatedSprite(G.UNIT_BIOMANTES_SCOUT_BASE, 64, 64, 7, 0.1);
+            var s = G.CreateAnimatedSprite(new SpriteKey(G.UNIT_BIOMANTES_SCOUT_BASE), 64, 64, 7, 0.1);
             var u = new Unit(new UnitValues
             {
                 Health = 100f,
@@ -73,7 +69,7 @@ public class EntryPoint : Core
 
             anotherUnits.Add(u);
 
-            Renderer.Add(new AnimatedSpriteRenderer(s, u.Transform));
+            G.Renderer.Add(new AnimatedSpriteRenderer(s, u.Transform));
 
             index = 0;
         }

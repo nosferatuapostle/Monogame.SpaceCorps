@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 
-public class Core : Game
+public class Core : Microsoft.Xna.Framework.Game
 {
     internal static Core instance;
 
@@ -56,31 +56,33 @@ public class Core : Game
 
     protected override void Update(GameTime gt)
     {
-        Time.Update(gt);
+        G.Input.Update();
+        G.Time.Update(gt);
+        G.Renderer.Update(gt);
 
-        Input.Update();
-
-        Renderer.Update(gt);
+        var kb = G.Input.Keyboard;
+        var time = G.Time;
+        var cam = G.Camera;
 
         const float speed = 200f;
-        if (Input.Keyboard.IsKeyDown(Keys.A))
+        if (kb.IsKeyDown(Keys.A))
         {
-            G.Camera.Position -= new Vector2(speed * Time.Delta, 0f);
+            cam.Position -= new Vector2(speed * time.Delta, 0f);
         }
 
-        if (Input.Keyboard.IsKeyDown(Keys.D))
+        if (kb.IsKeyDown(Keys.D))
         {
-            G.Camera.Position += new Vector2(speed * Time.Delta, 0f);
+            cam.Position += new Vector2(speed * time.Delta, 0f);
         }
 
-        if (Input.Keyboard.IsKeyDown(Keys.W))
+        if (kb.IsKeyDown(Keys.W))
         {
-            G.Camera.Position -= new Vector2(0f, speed * Time.Delta);
+            cam.Position -= new Vector2(0f, speed * time.Delta);
         }
 
-        if (Input.Keyboard.IsKeyDown(Keys.S))
+        if (kb.IsKeyDown(Keys.S))
         {
-            G.Camera.Position += new Vector2(0f, speed * Time.Delta);
+            cam.Position += new Vector2(0f, speed * time.Delta);
         }
 
         base.Update(gt);
@@ -90,7 +92,7 @@ public class Core : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        Renderer.Render();
+        G.Renderer.Render();
 
         base.Draw(gameTime);
     }

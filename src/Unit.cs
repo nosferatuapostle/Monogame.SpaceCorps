@@ -3,37 +3,28 @@ using MonoGame.Extended.Input;
 
 public class Unit : GameObject
 {
-    public UnitValues values;
+    public UnitValues Values;
     public bool isPlayer;
 
-    private Vector2 target;
+    private UnitMovement movement;
 
     public Unit(UnitValues uv)
     {
-        values = uv;
-        target = Vector2.Zero;
+        Values = uv;
+        movement = new UnitMovement();
     }
 
     public void Update(GameTime gt)
     {
         if (isPlayer)
         {
-            if (Input.Mouse.WasButtonPressed(MouseButton.Right))
+            if (G.Input.Mouse.WasButtonPressed(MouseButton.Right))
             {
-                target = G.MouseWorldPosition;
+                new StartMovintData(this, Transform.Position);
+                movement.Target = G.MouseWorldPosition;
             }
         }
 
-        if (target != Vector2.Zero)
-        {
-            var dir = target - Transform.Position;
-            if (dir.Length() < 10f)
-            {
-                target = Vector2.Zero;
-            }
-                
-            dir.Normalize();
-            Transform.Position += dir * 100f * Time.Delta;
-        }
+        movement.Update(this);
     }
 }

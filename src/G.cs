@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 
+public record class SpriteKey(string AssetName, string Name = "base");
+
 public static class G
 {
     public const string UNIT_BIOMANTES_SCOUT_BASE = "unit_biomantes_scout_base";
@@ -16,10 +18,19 @@ public static class G
 
     public static Vector2 MouseWorldPosition => Camera.ScreenToWorld(Input.Mouse.Position.ToVector2());
 
+    public static InputSystem Input;
+    public static TimeSystem Time;
+    public static RenderSystem Renderer;
+
     static G()
     {
         pixelTextures = [];
         ssheets = [];
+
+        Input = new InputSystem();
+        Time = new TimeSystem();
+        Renderer = new RenderSystem();
+
     }
 
     public static Texture2D GetPixelTexture(Color color)
@@ -33,10 +44,12 @@ public static class G
         pixelTex.SetData([color]);
         pixelTextures[color] = pixelTex;
         return pixelTex;
-    }    
+    }
 
-    public static AnimatedSprite CreateAnimatedSprite(string assetName, int w, int h, int frameCount, double frameTime, bool loop = true, string name = "base")
+    public static AnimatedSprite CreateAnimatedSprite(SpriteKey key, int w, int h, int frameCount, double frameTime, bool loop = true)
     {
+        var assetName = key.AssetName;
+        var name = key.Name;
         if (!ssheets.ContainsKey(assetName))
         {
             var tex = Core.Content.Load<Texture2D>(assetName);

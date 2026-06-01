@@ -1,2 +1,2 @@
-﻿using var game = new EntryPoint();
+﻿using var game = new Game();
 game.Run();

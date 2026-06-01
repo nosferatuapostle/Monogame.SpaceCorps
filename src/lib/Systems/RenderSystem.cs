@@ -2,21 +2,21 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-public static class Renderer
+public class RenderSystem
 {
-    private static HashSet<IRenderer> renderers;
+    private HashSet<IRenderer> renderers;
 
-    static Renderer()
+    public RenderSystem()
     {
         renderers = [];
     }
 
-    public static void Add(IRenderer r)
+    public void Add(IRenderer r)
     {
         renderers.Add(r);
     }
 
-    public static void Update(GameTime gt)
+    public void Update(GameTime gt)
     {
         foreach(var u in renderers)
         {
@@ -24,7 +24,7 @@ public static class Renderer
         }
     }
 
-    public static void Render()
+    public void Render()
     {
         var sb = Core.SpriteBatch;
 
