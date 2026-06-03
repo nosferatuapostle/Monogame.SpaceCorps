@@ -24,6 +24,8 @@ public static class G
 
     public static EntitySystem Entt;
 
+    public static EventBus EventBus;
+
     static G()
     {
         pixelTextures = [];
@@ -34,6 +36,8 @@ public static class G
         Renderer = new RenderSystem();
 
         Entt = new EntitySystem();
+
+        EventBus = new EventBus();
     }
 
     public static Texture2D GetPixelTexture(Color color)

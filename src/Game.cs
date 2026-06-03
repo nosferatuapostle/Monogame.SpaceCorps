@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.Graphics;
 
 public class Game : Core
 {
@@ -10,6 +12,8 @@ public class Game : Core
     {
         base.Initialize();
     }
+
+    private List<(Transform2, Vector2)> projs;
 
     protected override void LoadContent()
     {
@@ -33,7 +37,21 @@ public class Game : Core
 
         G.Entt.Add(unit);
 
+        projs = [];
+
+        G.EventBus.Subscribe<FireRedPixelData>(OnFireRedPixel);
+
         base.LoadContent();
+    }
+
+    private EventResult OnFireRedPixel(FireRedPixelData data)
+    {
+        var projTex = G.GetPixelTexture(Color.Red);
+        var projSprite = new Sprite(projTex);
+        G.Renderer.Add(new SpriteRenderer(projSprite, data.Transform));
+
+        projs.Add((data.Transform, data.Direction));
+        return EventResult.Continue;
     }
 
     List<Unit> anotherUnits = [];
@@ -46,6 +64,13 @@ public class Game : Core
         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+
+        foreach (var (transform, direction) in projs)
+        {
+            direction.Normalize();
+            transform.Position += direction * 200f * G.Time.Delta;
+            transform.Rotation = direction.ToAngle();
+        }
 
         index++;
         if (index % 200 == 0)
