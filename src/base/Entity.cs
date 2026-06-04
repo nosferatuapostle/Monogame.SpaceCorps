@@ -52,6 +52,19 @@ public class Entity : GameObject
         return default;
     }
 
+    public bool HasComponent<T>() where T : Component
+    {
+        foreach (var c in components)
+        {
+            if (c is T)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void RemoveComponent<T>(T c) where T : Component
     {
         c.OnRemoved();

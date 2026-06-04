@@ -3,10 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 
-// world renderer - transform
-// ui renderer
-
-
 public interface IRenderer
 {
     void Update(GameTime gt);
@@ -23,7 +19,7 @@ public abstract class WorldRenderer<T> : IRenderer where T : Sprite
         sprite = s;
         transform = t;
         
-        sprite.Origin =  new Vector2(sprite.TextureRegion.Width, sprite.TextureRegion.Height) * 0.5f;
+        sprite.Origin = new Vector2(sprite.TextureRegion.Width, sprite.TextureRegion.Height) * 0.5f;
     }
 
     public virtual void Update(GameTime gt) {}

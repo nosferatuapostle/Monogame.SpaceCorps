@@ -3,6 +3,7 @@ using System.Collections.Generic;
 public class EntitySystem
 {
     private List<Entity> entities;
+    public List<Entity> List => entities;
 
     public EntitySystem()
     {

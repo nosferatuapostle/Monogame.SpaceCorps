@@ -40,18 +40,11 @@ public class Core : Microsoft.Xna.Framework.Game
         IsMouseVisible = true;
     }
 
-    private BoxingViewportAdapter viewportAdapter;
-
     protected override void Initialize()
     {
-        base.Initialize();
-
         GraphicsDevice = base.GraphicsDevice;
-
         SpriteBatch = new SpriteBatch(GraphicsDevice);
-
-        viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1280, 720);
-        G.Camera = new OrthographicCamera(viewportAdapter);
+        base.Initialize();
     }
 
     protected override void Update(GameTime gt)
@@ -59,33 +52,7 @@ public class Core : Microsoft.Xna.Framework.Game
         G.Input.Update();
         G.Time.Update(gt);
         G.Renderer.Update(gt);
-        
         G.Entt.Update();
-
-        var kb = G.Input.Keyboard;
-        var time = G.Time;
-        var cam = G.Camera;
-
-        const float speed = 200f;
-        if (kb.IsKeyDown(Keys.A))
-        {
-            cam.Position -= new Vector2(speed * time.Delta, 0f);
-        }
-
-        if (kb.IsKeyDown(Keys.D))
-        {
-            cam.Position += new Vector2(speed * time.Delta, 0f);
-        }
-
-        if (kb.IsKeyDown(Keys.W))
-        {
-            cam.Position -= new Vector2(0f, speed * time.Delta);
-        }
-
-        if (kb.IsKeyDown(Keys.S))
-        {
-            cam.Position += new Vector2(0f, speed * time.Delta);
-        }
 
         base.Update(gt);
     }

@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 
-public record class StartMovementData(Entity Entity, Vector2 Start, Vector2 Target) : IEvent;
-
 public class UnitMovement : Component
 {
     private Vector2 target;
@@ -11,7 +9,7 @@ public class UnitMovement : Component
         get => target;
         set
         {
-            G.EventBus.Trigger(new StartMovementData(Entity, Entity.Transform.Position, value));
+            G.Events.Get<StartMovementData>().Trigger(new StartMovementData(Entity, Entity.Transform.Position, value));
             target = value;
         }
     }
@@ -27,14 +25,22 @@ public class UnitMovement : Component
 
     private EventResult OnStartMovement(StartMovementData data)
     {
-        System.Diagnostics.Debug.Print($"start position: {data.Start}, target position: {data.Target}");
-        return EventResult.Continue;
+        if (data.Entity == Entity)
+        {
+            System.Diagnostics.Debug.Print($"start position: {data.Start}, target position: {data.Target}");            
+        }
+        return EventResult.Break;
     }
 
     public override void OnAdded()
     {
-        G.EventBus.Subscribe<StartMovementData>(OnStartMovement);
+        G.Events.Get<StartMovementData>().Subscribe(OnStartMovement);
         uv = Entity.GetComponent<UnitValues>();
+    }
+
+    public override void OnRemoved()
+    {
+        G.Events.Get<StartMovementData>().Unsubscribe(OnStartMovement);
     }
 
     public override void OnUpdate()
@@ -46,10 +52,10 @@ public class UnitMovement : Component
 
         var t = Entity.Transform;
 
-        var dir = Target - t.Position;
+        var dir = target - t.Position;
         if (dir.Length() < 10f)
         {
-            Target = Vector2.Zero;
+            target = Vector2.Zero;
         }
 
         dir.Normalize();

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 public class RenderSystem
 {
@@ -14,6 +14,11 @@ public class RenderSystem
     public void Add(IRenderer r)
     {
         renderers.Add(r);
+    }
+
+    public void Remove(IRenderer r)
+    {
+        renderers.Remove(r);
     }
 
     public void Update(GameTime gt)

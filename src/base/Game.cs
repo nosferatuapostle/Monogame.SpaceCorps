@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 
 public class Game : Core
 {
@@ -11,6 +12,7 @@ public class Game : Core
     protected override void Initialize()
     {
         base.Initialize();
+        G.Camera = new OrthographicCamera(new ScalingViewportAdapter(GraphicsDevice, 1600, 900));
     }
 
     private List<(Transform2, Vector2)> projs;
@@ -39,7 +41,7 @@ public class Game : Core
 
         projs = [];
 
-        G.EventBus.Subscribe<FireRedPixelData>(OnFireRedPixel);
+        G.Events.Get<FireRedPixelData>().Subscribe(OnFireRedPixel);
 
         base.LoadContent();
     }
@@ -61,15 +63,36 @@ public class Game : Core
 
     protected override void Update(GameTime gt)
     {
-        if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+        var kb = G.Input.Keyboard;
+        var time = G.Time;
+        var cam = G.Camera;
 
-
-        foreach (var (transform, direction) in projs)
+        var speed = 200f * time.Delta;
+        if (kb.IsKeyDown(Keys.A))
         {
-            direction.Normalize();
-            transform.Position += direction * 200f * G.Time.Delta;
-            transform.Rotation = direction.ToAngle();
+            cam.Position -= new Vector2(speed, 0f);
+        }
+
+        if (kb.IsKeyDown(Keys.D))
+        {
+            cam.Position += new Vector2(speed, 0f);
+        }
+
+        if (kb.IsKeyDown(Keys.W))
+        {
+            cam.Position -= new Vector2(0f, speed);
+        }
+
+        if (kb.IsKeyDown(Keys.S))
+        {
+            cam.Position += new Vector2(0f, speed);
+        }
+
+        foreach (var (t, d) in projs)
+        {
+            d.Normalize();
+            t.Position += d * 400f * G.Time.Delta;
+            t.Rotation = d.ToAngle();
         }
 
         index++;

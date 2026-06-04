@@ -2,19 +2,22 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Input;
 
-public record class FireRedPixelData(Transform2 Transform, Vector2 Direction) : IEvent;
-
 public class Unit : Entity
 {
     public bool isPlayer;
 
     private UnitMovement movement;
+    private UnitData data;
 
     public Unit(UnitValues uv)
     {
-        AddComponent(uv);
         movement = new UnitMovement();
+        data = new UnitData{ Radius = 12f };
+
+        AddComponent(uv);
         AddComponent(movement);
+        AddComponent(data);
+        AddComponent(new UnitCollision(data));
     }
 
     public override void Update()
@@ -28,9 +31,9 @@ public class Unit : Entity
                 {
                     var t = new Transform2();
                     t.Position = Transform.Position;
-                    t.Scale *= 4;
+                    t.Scale *= 3;
 
-                    G.EventBus.Trigger(new FireRedPixelData(t, dir));
+                    G.Events.Get<FireRedPixelData>().Trigger(new FireRedPixelData(t, dir));
                 }
             }
             if (G.Input.Mouse.WasButtonPressed(MouseButton.Right))
@@ -42,3 +45,4 @@ public class Unit : Entity
         base.Update();
     }
 }
+
